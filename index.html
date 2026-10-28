@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sonar — 8-Bit Triangular Corner Stereo Speakers for GNOME 45–50</title>
+  <meta name="description" content="Zero-subprocess, Wayland-native Bottom-Left and Bottom-Right 8-Bit Triangular Stereo Audio Spectrum Corner Speakers for GNOME Shell 45–50.">
+  <meta name="theme-color" content="#070a0f">
+  <link rel="icon" type="image/png" href="brand/favicon-64.png" />
+  <style>
+    :root {
+      --bg: #070a0f;
+      --surface: rgba(16, 22, 32, 0.88);
+      --surface-alt: rgba(22, 30, 44, 0.92);
+      --border: #1f2b3d;
+      --primary: #ff5555;
+      --accent: #ff5555;
+      --primary-rgb: 255, 85, 85;
+      --primary-soft: rgba(255, 85, 85, 0.14);
+      --text: #eef4fa;
+      --muted: #98a9bc;
+      --mono: ui-monospace, "JetBrains Mono", "Fira Code", SFMono-Regular, Menlo, Consolas, monospace;
+      --sans: system-ui, -apple-system, BlinkMacSystemFont, "Inter", "Cantarell", sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: radial-gradient(circle at 16% 6%, rgba(var(--primary-rgb), 0.13), transparent 38%),
+                  radial-gradient(circle at 86% 90%, rgba(106, 215, 225, 0.08), transparent 42%),
+                  var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 84px;
+    }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+    .omni-wrap { max-width: 1080px; margin: 14px auto 0; padding: 0 24px; position: sticky; top: 12px; z-index: 30; }
+    .omni-bar {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+      padding: 10px 16px; background: rgba(11, 16, 24, 0.88); backdrop-filter: blur(14px);
+      border: 1px solid var(--border); border-radius: 999px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+    }
+    .brand-cluster { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .brand-pill {
+      font-family: var(--mono); font-weight: 600; font-size: 12.5px; color: var(--text);
+      padding: 4px 11px; border-radius: 999px; background: #131c28; border: 1px solid var(--border);
+      text-decoration: none;
+    }
+    .status-pill {
+      font-family: var(--mono); font-size: 11px; color: var(--primary);
+      padding: 3px 9px; border-radius: 999px; background: var(--primary-soft);
+      border: 1px solid rgba(var(--primary-rgb), 0.35);
+    }
+    .nav-links { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 12.5px; }
+    .nav-links a { color: var(--muted); padding: 4px 9px; border-radius: 999px; text-decoration: none; font-weight: 500; }
+    .nav-links a:hover, .nav-links a.active { background: var(--primary-soft); color: var(--primary); text-decoration: none; }
+    .hero { padding: 48px 0 40px; text-align: center; }
+    .hero-icon {
+      display: block; width: 120px; height: 120px; margin: 0 auto 20px; border-radius: 26px;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55), 0 0 24px rgba(var(--primary-rgb), 0.25);
+    }
+    .eyebrow {
+      display: inline-block; font-family: var(--mono); font-size: 0.8rem;
+      color: var(--primary); background: var(--primary-soft);
+      border: 1px solid rgba(var(--primary-rgb), 0.35);
+      padding: 4px 12px; border-radius: 999px; margin-bottom: 20px;
+    }
+    h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.12; letter-spacing: -0.02em; max-width: 860px; margin: 0 auto 18px; }
+    .subtitle { color: var(--muted); font-size: 1.12rem; max-width: 780px; margin: 0 auto 32px; }
+    .cta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-bottom: 48px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 8px;
+      font-weight: 600; font-size: 0.95rem; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text);
+    }
+    .btn-primary { background: var(--primary); color: #04160e; border-color: var(--primary); }
+    section { padding: 56px 0; border-top: 1px solid var(--border); }
+    h2 { font-size: 1.8rem; margin-bottom: 12px; }
+    .section-lead { color: var(--muted); margin-bottom: 28px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+    .card h3 { font-size: 1.15rem; margin-bottom: 10px; color: var(--text); }
+    .card p { color: var(--muted); font-size: 0.95rem; }
+    pre {
+      background: #080a0d; border: 1px solid var(--border); border-radius: 10px;
+      padding: 18px 20px; font-family: var(--mono); font-size: 0.9rem;
+      overflow-x: auto; color: var(--primary);
+    }
+    footer { border-top: 1px solid var(--border); padding: 36px 0; text-align: center; color: var(--muted); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="omni-wrap">
+    <nav class="omni-bar" aria-label="Studio 2201 Suite Navigation">
+      <div class="brand-cluster">
+        <a class="brand-pill" href="https://studio2201.com">STUDIO 2201</a>
+        <span class="status-pill">SONAR v1.0.0 · GNOME 45–50</span>
+      </div>
+      <div class="nav-links">
+        <a href="https://studio2201.github.io/kelp/">Kelp</a>
+        <a href="https://studio2201.github.io/reef/">Reef</a>
+        <a href="https://studio2201.github.io/coral/">Coral</a>
+        <a href="https://studio2201.github.io/seabed/">Seabed</a>
+        <a href="https://studio2201.github.io/shoal/">Shoal</a>
+        <a href="https://studio2201.github.io/tide/">Tide</a>
+        <a class="active" href="https://studio2201.github.io/sonar/">Sonar</a>
+      </div>
+    </nav>
+  </div>
+  <main class="container">
+    <section class="hero" style="border-top:none;">
+      <img class="hero-icon" src="brand/icon-256.png" alt="Sonar Logo" />
+      <span class="eyebrow">SONAR v1.0.0 · 8-BIT CORNER STEREO SPEAKERS · ZERO SUBPROCESSES</span>
+      <h1>Dual 8-Bit Triangular Corner Speakers for GNOME Shell.</h1>
+      <p class="subtitle">Mirrored bottom-left and bottom-right 8-bit LED spectrum triangles flanking Reef — driven in real time by your Left and Right stereo audio channels via in-process GStreamer PipeWire/PulseAudio monitor capture.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/studio2201/sonar/releases/latest">⬇ Download v1.0.0 (.shell-extension.zip)</a>
+        <a class="btn" href="https://github.com/studio2201/sonar">★ Star on GitHub</a>
+        <a class="btn" href="https://ubermetroid.github.io/tuition-not-coffee">🎓 Tuition, Not Coffee</a>
+      </div>
+    </section>
+    <section id="features">
+      <h2>Engineered for Reef, Kelp &amp; the Studio 2201 Suite</h2>
+      <p class="section-lead">True stereo separation, dual transparency controls, and 1-click suite color sync.</p>
+      <div class="grid-3">
+        <div class="card">
+          <h3>True Left &amp; Right Stereo FFT</h3>
+          <p>Captures <code>@DEFAULT_MONITOR@</code> in-process via <code>gi://Gst</code> with 16-band energy averaging per channel and falling 8-bit peak-hold caps.</p>
+        </div>
+        <div class="card">
+          <h3>Transparency &amp; Suite Borders</h3>
+          <p>Independent <strong>Background Opacity (0–100%)</strong> and <strong>8-Bit Brick Opacity (20–100%)</strong>, rounded outer corner arc, and 1-click Studio 2201 color sync.</p>
+        </div>
+        <div class="card">
+          <h3>Scroll Volume &amp; Click Controls</h3>
+          <p>Scroll on either corner triangle to adjust master volume, left-click to Play/Pause active MPRIS media, or right-click for quick 8-Bit Arcade VU toggles.</p>
+        </div>
+      </div>
+    </section>
+    <section id="install">
+      <h2>Quick Install</h2>
+      <pre>gnome-extensions install --force sonar@studio2201.github.io.shell-extension.zip
+gnome-extensions enable sonar@studio2201.github.io</pre>
+    </section>
+  </main>
+  <footer>
+    <div class="container">
+      <p><strong>Sonar</strong> (<code>sonar@studio2201.github.io</code>) · Released under <a href="https://github.com/studio2201/sonar/blob/main/LICENSE">GPL-3.0-or-later</a> · <a href="https://studio2201.com">studio2201.com</a></p>
+    </div>
+  </footer>
+</body>
+</html>
