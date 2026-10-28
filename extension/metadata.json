@@ -1,0 +1,10 @@
+{
+    "uuid": "sonar@studio2201.github.io",
+    "name": "Studio 2201: Sonar (8-Bit Corner Speakers)",
+    "description": "Dual bottom-left and bottom-right 8-bit triangular corner audio spectrum visualizers for GNOME Shell 45–50. Driven by real-time in-process GStreamer stereo (L/R) PipeWire/PulseAudio monitor analysis with 8-bit pixel LED bricks, peak-hold caps, MPRIS media & volume scroll controls, and Studio 2201 suite color sync.",
+    "shell-version": ["45", "46", "47", "48", "49", "50"],
+    "session-modes": ["user"],
+    "url": "https://github.com/studio2201/sonar",
+    "version-name": "1.0.0",
+    "settings-schema": "org.gnome.shell.extensions.sonar"
+}

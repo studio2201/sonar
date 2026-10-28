@@ -1,0 +1,7 @@
+/* SPDX-License-Identifier: GPL-3.0-or-later */
+/* Sonar compositor stylesheet for bottom-left and bottom-right 8-bit corner speaker widgets. */
+
+.sonar-corner-speaker {
+    margin: 0px;
+    padding: 0px;
+}

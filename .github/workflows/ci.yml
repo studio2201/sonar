@@ -1,0 +1,103 @@
+name: CI & EGO Bundle Verification
+
+on:
+  push:
+    branches: ["main", "master"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    name: Verification Ladder & Official EGO Review Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install GNOME Shell & EGO validation tools
+        run: |
+          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|http://ubuntu.osuosl.org/ubuntu|g' /etc/apt/sources.list /etc/apt/sources.list.d/* 2>/dev/null || true
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libglib2.0-bin gnome-shell-common gnome-shell gir1.2-adw-1 gir1.2-gtk-4.0 gir1.2-gstreamer-1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gjs xvfb libxml2-utils jq unzip pipx
+
+      - name: Validate GSettings XML schema
+        run: |
+          xmllint --noout extension/schemas/*.xml
+          glib-compile-schemas --strict --dry-run extension/schemas
+
+      - name: Run zero-dependency GJS architectural & headless behavioral test suite
+        run: xvfb-run -a gjs -m tests/verify.js
+
+      - name: Verify GNOME Shell GIR typelibs & compositor module syntax
+        run: |
+          for f in extension/*.js extension/sonar/*.js extension/ui/*.js extension/ui/settings/*.js tests/verify.js; do
+            node --input-type=module --check < "$f"
+          done
+
+      - name: Pack EGO extension zip bundle
+        run: |
+          mkdir -p dist
+          gnome-extensions pack extension \
+            --force \
+            --out-dir=dist \
+            --schema=schemas/org.gnome.shell.extensions.sonar.gschema.xml \
+            --extra-source=sonar \
+            --extra-source=ui
+          unzip -l dist/sonar@studio2201.github.io.shell-extension.zip
+
+      - name: Run shexli EGO static review analyzer (0 errors, 0 warnings)
+        run: |
+          pipx run shexli dist/sonar@studio2201.github.io.shell-extension.zip
+
+      - name: Official EGO Review Gate (Metadata, Zip Audit, & gnome-extensions install)
+        run: |
+          set -euo pipefail
+          ZIP="dist/sonar@studio2201.github.io.shell-extension.zip"
+
+          echo "==> 1. Validating metadata.json required EGO fields..."
+          jq -e '.uuid == "sonar@studio2201.github.io" and .name == "Studio 2201: Sonar (8-Bit Corner Speakers)" and (.["shell-version"] | length >= 1) and .["settings-schema"] == "org.gnome.shell.extensions.sonar"' extension/metadata.json >/dev/null
+
+          echo "==> 2. Auditing .shell-extension.zip for EGO required and forbidden files..."
+          CONTENTS="$(unzip -Z1 "$ZIP")"
+          for req in extension.js prefs.js metadata.json schemas/org.gnome.shell.extensions.sonar.gschema.xml ui/stylesheet.css ui/speaker_style.js ui/settings/color.js ui/settings/gsettings.js ui/settings/prefs_pages.js sonar/sonar_manager.js sonar/audio_stream.js sonar/corner_speaker.js sonar/media_volume.js; do
+            echo "$CONTENTS" | grep -qx "$req"
+          done
+          if echo "$CONTENTS" | grep -E '(gschemas\.compiled|\.git|\.po$|\.pot$|\.rs$|Cargo\.|node_modules|package\.json)'; then
+            echo "ERROR: Forbidden file found inside EGO zip archive!"
+            exit 1
+          fi
+
+          echo "==> 3. Scanning JS modules for EGO review-guideline violations..."
+          if grep -rnE '(ByteArray\.toString|imports\.mainloop|imports\.lang|ExtensionUtils|Gio\.Subprocess|GLib\.spawn_|\beval\s*\(|new Function\s*\()' extension/; then
+            echo "ERROR: Forbidden EGO pattern found in extension/"
+            exit 1
+          fi
+
+          echo "==> 4. Testing installation via official gnome-extensions CLI..."
+          gnome-extensions install --force "$ZIP"
+          test -f "$HOME/.local/share/gnome-shell/extensions/sonar@studio2201.github.io/extension.js"
+          test -f "$HOME/.local/share/gnome-shell/extensions/sonar@studio2201.github.io/metadata.json"
+
+      - name: Upload EGO extension zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sonar-shell-extension-zip
+          path: dist/sonar@studio2201.github.io.shell-extension.zip
+
+      - name: Publish GitHub Release on Tag Push
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          ZIP=$(ls dist/*.shell-extension.zip | head -n 1)
+          NAME=$(jq -r '.name' extension/metadata.json)
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$ZIP" --clobber
+          else
+            gh release create "$TAG" "$ZIP" --title "${TAG} — ${NAME}" --generate-notes
+          fi

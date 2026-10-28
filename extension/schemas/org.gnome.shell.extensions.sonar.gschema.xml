@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="sonar@studio2201.github.io">
+  <schema id="org.gnome.shell.extensions.sonar" path="/org/gnome/shell/extensions/sonar/">
+    <key name="enable-left-speaker" type="b">
+      <default>true</default>
+      <summary>Enable bottom-left 8-bit corner speaker</summary>
+      <description>Renders the left-channel 8-bit triangular spectrum visualizer in the bottom-left screen corner.</description>
+    </key>
+    <key name="enable-right-speaker" type="b">
+      <default>true</default>
+      <summary>Enable bottom-right 8-bit corner speaker</summary>
+      <description>Renders the right-channel 8-bit triangular spectrum visualizer in the bottom-right screen corner.</description>
+    </key>
+    <key name="corner-size" type="u">
+      <default>136</default>
+      <summary>Corner triangle size in pixels (80–240)</summary>
+      <description>Width and height of each bottom-corner right-triangle speaker widget in pixels.</description>
+    </key>
+    <key name="corner-margin" type="u">
+      <default>6</default>
+      <summary>Floating screen-edge margin in pixels (0–24)</summary>
+      <description>Distance in pixels from the bottom and side screen edges (default 6 px matching Reef).</description>
+    </key>
+    <key name="column-count" type="u">
+      <default>8</default>
+      <summary>Number of 8-bit frequency columns per speaker (4–12)</summary>
+      <description>Number of stepped frequency columns inside each triangular corner speaker.</description>
+    </key>
+    <key name="show-peak-caps" type="b">
+      <default>true</default>
+      <summary>Show 8-bit falling peak-hold caps</summary>
+      <description>Renders a bright 8-bit peak-hold brick at the top of each column that decays smoothly.</description>
+    </key>
+    <key name="idle-hide" type="b">
+      <default>false</default>
+      <summary>Auto-fade speakers when audio is silent</summary>
+      <description>Dims or hides the corner speakers when no audio is playing.</description>
+    </key>
+    <key name="sensitivity" type="u">
+      <default>100</default>
+      <summary>Audio gain sensitivity percentage (50–200%)</summary>
+      <description>Scales incoming Left/Right dB levels to make the 8-bit bricks more or less reactive.</description>
+    </key>
+    <key name="color-mode" type="s">
+      <default>'suite-accent'</default>
+      <summary>8-bit brick color palette mode</summary>
+      <description>'suite-accent' uses the synced Studio 2201 accent color; 'arcade-vu' uses classic Emerald -> Amber -> Coral VU tiers.</description>
+    </key>
+    <key name="background-opacity" type="u">
+      <default>80</default>
+      <summary>Background opacity percentage (0–100%)</summary>
+      <description>Opacity of the corner speaker background from 0 (transparent) to 100 (solid), default 80% matching Reef.</description>
+    </key>
+    <key name="brick-opacity" type="u">
+      <default>100</default>
+      <summary>8-bit LED brick opacity percentage (20–100%)</summary>
+      <description>Transparency of the lit 8-bit frequency bricks and peak-hold caps.</description>
+    </key>
+    <key name="show-border" type="b">
+      <default>true</default>
+      <summary>Show accent border ring around corner speakers</summary>
+      <description>When true, draws a high-contrast border ring around the corner speakers matching Kelp and Reef.</description>
+    </key>
+    <key name="border-width" type="u">
+      <default>2</default>
+      <summary>Accent border width in pixels (0–8)</summary>
+      <description>Thickness of the corner speaker border ring in CSS pixels (default 2 px matching Kelp and Reef).</description>
+    </key>
+    <key name="border-radius" type="u">
+      <default>16</default>
+      <summary>Outer corner radius in pixels (0–32)</summary>
+      <description>Corner rounding of the outer right-angle corner in CSS pixels (default 16 px matching Reef).</description>
+    </key>
+    <key name="border-color-rgba" type="s">
+      <default>'rgb(255,0,0)'</default>
+      <summary>Accent border and 8-bit brick color (RGBA or hex)</summary>
+      <description>CSS RGB/RGBA color string for the speaker border ring and bricks (default Coral Red matching Kelp and Reef).</description>
+    </key>
+    <key name="scroll-volume" type="b">
+      <default>true</default>
+      <summary>Scroll wheel on corner speakers adjusts system volume</summary>
+      <description>Scrolling up or down on either corner triangle raises or lowers master output volume.</description>
+    </key>
+    <key name="click-action" type="s">
+      <default>'play-pause'</default>
+      <summary>Left-click action on corner speakers</summary>
+      <description>Action when left-clicking inside a corner triangle: 'play-pause', 'mute', or 'none'.</description>
+    </key>
+  </schema>
+</schemalist>
